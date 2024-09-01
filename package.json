@@ -1,0 +1,21 @@
+{
+  "name": "switch-ts",
+  "version": "1.0.0",
+  "description": "Library to create bots and Apps on Switch",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "New-dev0",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@types/sockjs-client": "^1.5.4",
+    "@types/ws": "^8.5.12",
+    "sockjs-client": "^1.6.1",
+    "uuid": "^10.0.0",
+    "ws": "^8.18.0"
+  }
+}
