@@ -1,4 +1,5 @@
-import { parseSender, User, UserStatus, UserStatusInfo } from "./user";
+import { parseSender, UserStatus, UserStatusInfo } from "./user";
+import User from "./user";
 
 export interface BotCommand {
     command: string;

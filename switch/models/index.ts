@@ -1,1 +1,1 @@
-import {User} from "./user.ts";
+import User from "./user.ts";
