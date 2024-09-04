@@ -13,6 +13,7 @@ import { BotCommand, BotInfo } from "../models/bot";
 import Channel from "../models/channel";
 import Group from "../models/group";
 import { Community } from "../models/community";
+import { Command } from "../models/command";
 
 export default class Client extends switchBaseClient {
     private receiveUpdates: boolean;
@@ -131,8 +132,9 @@ export default class Client extends switchBaseClient {
                             handler.params.command ===
                                 data["details"]["command"]
                         ) {
-                            const message: Message = Message
-                                .parseMessageFromJson(data, this);
+                            const message: Command = Command
+                                .parseFromData(data, this);
+                            console.log(message.commandParams);
                             await handler.fn(message);
                         }
                     }

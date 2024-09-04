@@ -3,7 +3,7 @@ import { editMessageParams, sendMessageParams } from "../methods/message";
 import { parseSender } from "./user";
 import User from "./user";
 
-type MessageParams = {
+export type MessageParams = {
     message: string;
     communityId?: string | null;
     channelId?: string | null;

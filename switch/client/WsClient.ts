@@ -1,11 +1,6 @@
 import { Data, WebSocket } from "ws";
 import { v4 as uuid } from "uuid";
 
-interface Subscription {
-    destination: string;
-    id: string;
-}
-
 export class WsClient {
     private ws: WebSocket | null = null;
     private url: string;

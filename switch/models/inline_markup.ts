@@ -4,15 +4,25 @@ export interface KeyboardButton {
     callbackData?: string;
 }
 
-export default interface InlineMarkup {
+export default class InlineMarkup {
     keyboard_buttons: Array<Array<KeyboardButton>>;
+
+    constructor(buttons: Array<Array<KeyboardButton>>) {
+        this.keyboard_buttons = buttons;
+    }
+
+    convertToRequest() {
+        return {
+            "inlineKeyboard": this.keyboard_buttons,
+        };
+    }
 }
 
 export class Button {
     markup: InlineMarkup;
 
     constructor() {
-        this.markup = { keyboard_buttons: [[]] };
+        this.markup = new InlineMarkup([]);
     }
 
     public url(text: string, url: string) {
@@ -22,7 +32,7 @@ export class Button {
         return this;
     }
 
-    public callback(text:string, callbackData: string) {
+    public callback(text: string, callbackData: string) {
         this.markup.keyboard_buttons.push([{
             "text": text,
             "callbackData": callbackData,
