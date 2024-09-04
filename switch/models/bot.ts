@@ -2,9 +2,13 @@ import { parseSender, UserStatus, UserStatusInfo } from "./user";
 import User from "./user";
 
 export interface BotCommand {
-    command: string;
-    description?: string | null;
+    command: string,
+    botId?: number,
+    description?: string | null,
+    channel?: boolean,
+    subCommands?: {};
 }
+
 
 export interface BotInfo extends User {
     commands?: Array<BotCommand>;

@@ -1,6 +1,7 @@
 import Client from "../client/client";
 import { editMessageParams, sendMessageParams } from "../methods/message";
-import { parseSender, User } from "./user";
+import { parseSender } from "./user";
+import User from "./user";
 
 type MessageParams = {
     message: string;

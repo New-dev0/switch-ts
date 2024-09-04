@@ -8,7 +8,7 @@ export interface UserStatus {
 };
 
 export default interface User {
-    id: number;
+    id?: number;
     name?: string;
     username?: string;
     link?: string;

@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 
 import { Endpoints } from "./endpoints";
-import { User } from "../models/user";
+import User from "../models/user";
 import { v4 as uuid } from "uuid";
 import { WsClient } from "./WsClient";
 import Message from "../models/message";
@@ -79,6 +79,7 @@ export abstract class switchBaseClient {
             params: { command },
             type: HandlerType.COMMAND,
         });
+        console.log(this._handlers);
     }
 
     public onMessage(handler: (message: Message) => any) {

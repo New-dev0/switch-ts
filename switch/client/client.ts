@@ -67,7 +67,11 @@ export default class Client extends switchBaseClient {
     }
 
     public async isCommunityMember(communityId: string, userId: number) {
-        return await CommunityMethods.isCommunityMember(this, communityId, userId);
+        return await CommunityMethods.isCommunityMember(
+            this,
+            communityId,
+            userId,
+        );
     }
 
     public async createChannel(channel: Channel) {
@@ -119,6 +123,18 @@ export default class Client extends switchBaseClient {
                             this,
                         );
                         await handler.fn(message);
+                    } else if (
+                        data["type"] === "COMMAND" &&
+                        handler.type === HandlerType.COMMAND
+                    ) {
+                        if (
+                            handler.params.command ===
+                                data["details"]["command"]
+                        ) {
+                            const message: Message = Message
+                                .parseMessageFromJson(data, this);
+                            await handler.fn(message);
+                        }
                     }
                 });
             }
