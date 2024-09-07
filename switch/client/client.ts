@@ -7,6 +7,10 @@ import * as BotMethods from "../methods/bot";
 import * as CommunityMethods from "../methods/community";
 import * as ChannelMethods from "../methods/channel";
 import * as GroupMethods from "../methods/group";
+import * as GameMethods from "../methods/game";
+import * as StickerMethods from "../methods/stickers";
+import * as MediaMethods from "../methods/media";
+import * as CallbackMethods from "../methods/callbacks";
 
 import Message from "../models/message";
 import { BotCommand, BotInfo } from "../models/bot";
@@ -14,6 +18,7 @@ import Channel from "../models/channel";
 import Group from "../models/group";
 import { Community } from "../models/community";
 import { Command } from "../models/command";
+import { Media } from "../models/media";
 
 export default class Client extends switchBaseClient {
     private receiveUpdates: boolean;
@@ -43,6 +48,14 @@ export default class Client extends switchBaseClient {
         params: messageMethods.editMessageParams,
     ) {
         return await messageMethods.editMessage(this, messageId, params);
+    }
+
+    public async forwardMessage(params: messageMethods.ForwardMessageParams) {
+        return await messageMethods.forwardMessage(this, params);
+    }
+
+    public async getMessage(messageId: number) {
+        return await messageMethods.getMessage(this, messageId);
     }
 
     public async getBotInfo(botId: number) {
@@ -109,6 +122,70 @@ export default class Client extends switchBaseClient {
 
     public async updateGroup(group: Group) {
         return await GroupMethods.updateGroup(this, group);
+    }
+
+    // Game methods
+    public async createLeaderboard(params: GameMethods.CreateLeaderboardParams) {
+        return await GameMethods.createLeaderboard(this, params);
+    }
+
+    public async updateLeaderboard(params: GameMethods.UpdateLeaderboardParams) {
+        return await GameMethods.updateLeaderboard(this, params);
+    }
+
+    public async getGlobalLeaderboard(botId?: number) {
+        return await GameMethods.getGlobalLeaderboard(this, botId);
+    }
+
+    public async getCommunityLeaderboard(communityId: string, botId?: number) {
+        return await GameMethods.getCommunityLeaderboard(this, communityId, botId);
+    }
+
+    public async getGameScore(params: GameMethods.GetGameScoreParams) {
+        return await GameMethods.getGameScore(this, params);
+    }
+
+    // Sticker methods
+    public async getStickerSet(params: StickerMethods.GetStickerSetParams) {
+        return await StickerMethods.getStickerSet(this, params);
+    }
+
+    public async createStickerSet(params: StickerMethods.CreateStickerSetParams) {
+        return await StickerMethods.createStickerSet(this, params);
+    }
+
+    public async addStickerToSet(params: StickerMethods.AddStickerToSetParams) {
+        return await StickerMethods.addStickerToSet(this, params);
+    }
+
+    public async setStickerPositionInSet(params: StickerMethods.SetStickerPositionInSetParams) {
+        return await StickerMethods.setStickerPositionInSet(this, params);
+    }
+
+    public async deleteStickerFromSet(params: StickerMethods.DeleteStickerFromSetParams) {
+        return await StickerMethods.deleteStickerFromSet(this, params);
+    }
+
+    // Media methods
+    public async getMediaByID(params: MediaMethods.GetMediaParams) {
+        return await MediaMethods.getMediaByID(this, params);
+    }
+
+    public async updateMedia(params: MediaMethods.UpdateMediaParams) {
+        return await MediaMethods.updateMedia(this, params);
+    }
+
+    public async deleteMedia(params: MediaMethods.DeleteMediaParams) {
+        return await MediaMethods.deleteMedia(this, params);
+    }
+
+    public async uploadMedia(file: File) {
+        return await MediaMethods.uploadMedia(this, file);
+    }
+
+    // Add this new method
+    public async answerCallbackQuery(params: CallbackMethods.AnswerCallbackParams): Promise<boolean> {
+        return await CallbackMethods.answerCallbackQuery(this, params);
     }
 
     parseChatEvents(data: any) {

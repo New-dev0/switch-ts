@@ -66,3 +66,34 @@ export async function editMessage(
     );
     return Message.parseMessageFromJson(response, client);
 }
+
+export interface ForwardMessageParams {
+    messageId: number | number[];
+    groupChannelId?: string;
+    receiverId?: number;
+}
+
+export async function forwardMessage(client: Client, params: ForwardMessageParams): Promise<Message | Message[]> {
+    const messageIdList = Array.isArray(params.messageId);
+    const messageId = messageIdList ? (params.messageId as number[]).join(',') : params.messageId.toString();
+
+    const queryParams = new URLSearchParams();
+    if (params.groupChannelId) queryParams.append('groupChannelId', params.groupChannelId);
+    if (params.receiverId) queryParams.append('receiverId', params.receiverId.toString());
+
+    const response = await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/message/forward/${messageId}?${queryParams.toString()}`, {
+        method: "PUT",
+    });
+
+    const messages = Array.isArray(response) ? response.map(msg => Message.parseMessageFromJson(msg, client)) : [Message.parseMessageFromJson(response, client)];
+
+    return messageIdList ? messages : messages[0];
+}
+
+export async function getMessage(client: Client, messageId: number): Promise<Message> {
+    const response = await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/message/${messageId}`, {
+        method: "GET",
+    });
+
+    return Message.parseMessageFromJson(response, client);
+}

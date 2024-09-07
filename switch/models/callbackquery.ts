@@ -1,15 +1,20 @@
 import Client from "../client/client";
+import { AnswerCallbackParams } from "../methods/callbacks";
 
 export default class CallbackQuery {
     private client?: Client;
-    private callbackId: string;
+    callbackId: string;
 
     constructor({
-        callbackId: string,
+        callbackId,
     }) {
-        this.callbackId = this.callbackId;
-    }
+        this.callbackId = callbackId;
+    };
 
-    public answer() {
+    public async answer(params: AnswerCallbackParams) {
+        if (this.client) {
+            params.callbackId = this.callbackId;
+            return await this.client.answerCallbackQuery(params);
+        }
     }
 }
