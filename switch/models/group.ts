@@ -14,28 +14,28 @@ export default class Group {
     updatedAt?: Date;
 
     constructor(
-        id: string,
-        name: string,
-        communityId: string,
-        enabledFree: boolean,
-        enabledPublic: boolean,
-        defaultGroup: boolean,
-        isPublic: boolean,
-        createdBy: string,
+        id?: string,
+        name?: string,
+        communityId?: string,
+        enabledFree?: boolean,
+        enabledPublic?: boolean,
+        defaultGroup?: boolean,
+        isPublic?: boolean,
+        createdBy?: string,
         icon?: string,
         groupLogoUrl?: string,
         allowedContent?: string,
         createdAt?: Date,
         updatedAt?: Date,
     ) {
-        this.id = id;
-        this.name = name;
-        this.communityId = communityId;
-        this.enabledFree = enabledFree;
-        this.enabledPublic = enabledPublic;
-        this.defaultGroup = defaultGroup;
-        this.isPublic = isPublic;
-        this.createdBy = createdBy;
+        this.id = id || '';
+        this.name = name || '';
+        this.communityId = communityId || '';
+        this.enabledFree = enabledFree || false;
+        this.enabledPublic = enabledPublic || false;
+        this.defaultGroup = defaultGroup || false;
+        this.isPublic = isPublic || false;
+        this.createdBy = createdBy || '';
         this.icon = icon;
         this.groupLogoUrl = groupLogoUrl;
         this.allowedContent = allowedContent;
@@ -43,21 +43,21 @@ export default class Group {
         this.updatedAt = updatedAt;
     }
 
-    static parseFromData(data): Group {
+    static parseFromData(data: Record<string, any>): Group {
         return new Group(
-            data["groupId"],
-            data["groupName"],
-            data["communityId"],
-            data["enabledFree"],
-            data["enabledPublic"],
-            data["defaultGroup"],
-            data["isPublic"],
-            data["createdBy"],
-            data["icon"],
-            data["groupLogoUrl"],
-            data["allowedContent"],
-            data["createdAt"] ? new Date(data["createdAt"]) : undefined,
-            data["updatedAt"] ? new Date(data["updatedAt"]) : undefined,
+            data.id,
+            data.name,
+            data.communityId,
+            data.enabledFree,
+            data.enabledPublic,
+            data.defaultGroup,
+            data.isPublic,
+            data.createdBy,
+            data.icon,
+            data.groupLogoUrl,
+            data.allowedContent,
+            data.createdAt ? new Date(data.createdAt) : undefined,
+            data.updatedAt ? new Date(data.updatedAt) : undefined
         );
     }
 

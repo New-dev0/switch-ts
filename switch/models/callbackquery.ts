@@ -7,6 +7,8 @@ export default class CallbackQuery {
 
     constructor({
         callbackId,
+    }: {
+        callbackId: string;
     }) {
         this.callbackId = callbackId;
     };

@@ -101,3 +101,16 @@ export class Media {
         );
     }
 }
+
+export interface UploadMediaResponse {
+  timestamp: number;
+  public: boolean;
+  file_name: string;
+  file_size: number;
+  backup_channel: number;
+  backup_message_id: number;
+  file_id: string;
+  fileId: string;
+  status: string;
+  downloadUrl: string;
+}

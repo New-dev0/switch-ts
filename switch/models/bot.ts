@@ -24,8 +24,12 @@ export function parseBotInfo(data: any): BotInfo {
                 : UserStatusInfo.ONLINE,
         };
     }
-    user.commands = data?.commands?.map((cmd) => {
-        return { "command": cmd.command, "description": cmd.description };
+    user.commands = data?.commands?.map((cmd: BotCommand) => {
+        return {
+            command: cmd.command,
+            description: cmd.description,
+            channel: cmd.channel
+        };
     });
     return user;
 }

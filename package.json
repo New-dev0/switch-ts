@@ -1,21 +1,80 @@
 {
-  "name": "switch-ts",
-  "version": "1.0.0",
-  "description": "Library to create bots and Apps on Switch",
-  "main": "index.js",
+  "name": "switch-bots",
+  "version": "1.0.1",
+  "description": "Switch API TypeScript SDK for building bots and applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "prepare": "npm run build",
+    "test": "jest",
+    "lint": "eslint 'switch/**/*.ts'",
+    "format": "prettier --write 'switch/**/*.ts'",
+    "docs": "typedoc --out docs switch/",
+    "example": "ts-node example/index.ts"
   },
-  "author": "New-dev0",
-  "license": "ISC",
-  "devDependencies": {
-    "typescript": "^5.5.4"
-  },
+  "keywords": [
+    "switch",
+    "switch-api",
+    "switch-sdk",
+    "switch-bot",
+    "switch-bots",
+    "bot",
+    "bot-api",
+    "bot-framework",
+    "chat",
+    "chat-api",
+    "messaging",
+    "community",
+    "social",
+    "realtime",
+    "websocket",
+    "api-client",
+    "api-wrapper",
+    "sdk",
+    "typescript-sdk",
+    "gaming",
+    "game-bot",
+    "moderation",
+    "stickers"
+  ],
+  "author": "Devesh Pal",
+  "license": "MIT",
   "dependencies": {
-    "@types/sockjs-client": "^1.5.4",
-    "@types/ws": "^8.5.12",
-    "sockjs-client": "^1.6.1",
-    "uuid": "^10.0.0",
-    "ws": "^8.18.0"
+    "ws": "^8.13.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/ws": "^8.5.5",
+    "@types/uuid": "^9.0.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "prettier": "^3.0.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "typedoc": "^0.25.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/switchpe/switch-bots.git"
+  },
+  "bugs": {
+    "url": "https://github.com/switchpe/switch-bots/issues"
+  },
+  "homepage": "https://github.com/switchpe/switch-bots#readme",
+  "publishConfig": {
+    "access": "public"
   }
 }

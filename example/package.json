@@ -1,0 +1,29 @@
+{
+  "name": "switch-bots-example",
+  "version": "1.0.0",
+  "description": "Example bot using switch-bots SDK",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "dev": "ts-node-dev --respawn index.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "switch-bots": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.0"
+  },
+  "private": true,
+  "keywords": [
+    "switch",
+    "bot",
+    "example"
+  ],
+  "author": "Devesh Pal",
+  "license": "MIT"
+}

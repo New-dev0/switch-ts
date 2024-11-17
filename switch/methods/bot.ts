@@ -21,3 +21,24 @@ export async function getBotInfo(client: Client, params: {botId: number}) {
     const data = await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/bots?botId=${params.botId}`);
     return parseBotInfo(data);
 }
+
+export interface SetBotIntroMessageParams {
+  botId: string;
+  buttonCommand: string;
+  buttonName: string;
+  welcomeImage?: string;
+  welcomeText: string;
+}
+
+export async function setBotIntroMessage(client: Client, params: SetBotIntroMessageParams): Promise<void> {
+  await client.request(
+    `${Endpoints.CHAT_SERVICE_URL}/v1/bots/set-intro-message`,
+    {
+      method: "POST",
+      body: JSON.stringify(params),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+}

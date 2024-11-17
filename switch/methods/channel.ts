@@ -27,7 +27,7 @@ export async function getAllChannels(client: Client, communityId: string): Promi
     const response = await client.request(
         `${Endpoints.COMMUNITY_SERVICE_URL}/v1/community/channel/all?communityId=${communityId}`
     );
-    return response?.result.map((channelData) => Channel.parseFromData(channelData)) || [];
+    return response?.result.map((channelData: Record<string, any>) => Channel.parseFromData(channelData)) || [];
 }
 
 export async function updateChannel(client: Client, channel: Channel): Promise<Channel> {
@@ -44,11 +44,15 @@ export async function updateChannel(client: Client, channel: Channel): Promise<C
     return Channel.parseFromData(response);
 }
 
-export async function deleteChannel(client: Client, channelId: string): Promise<void> {
-    await client.request(
-        `${Endpoints.COMMUNITY_SERVICE_URL}/v1/community/channel/${channelId}`,
-        {
-            method: "DELETE",
-        }
-    );
+export interface DeleteChannelParams {
+  channelId: string;
+}
+
+export async function deleteChannel(client: Client, params: DeleteChannelParams): Promise<void> {
+  await client.request(
+    `${Endpoints.COMMUNITY_SERVICE_URL}/v1/community/channel/${params.channelId}`,
+    {
+      method: "DELETE"
+    }
+  );
 }

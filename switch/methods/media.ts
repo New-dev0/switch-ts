@@ -1,6 +1,6 @@
 import Client from "../client/client";
 import { Endpoints } from "../client/endpoints";
-import { Media } from "../models/media";
+import { Media, UploadMediaResponse } from "../models/media";
 
 export interface GetMediaParams {
   id: number;
@@ -34,6 +34,19 @@ export async function deleteMedia(client: Client, params: DeleteMediaParams): Pr
   });
 }
 
-export async function uploadMedia(client: Client, file: File) {
+export async function uploadMedia(client: Client, file: File): Promise<UploadMediaResponse> {
+  // First get the upload URL
+  const { url } = await client.request("https://storage.switch.click/get_upload_url", {
+    method: "GET",
+  });
 
+  // Prepare form data
+  const formData = new FormData();
+  formData.append("file", file);
+
+  // Upload the file
+  return await fetch(`${url}/upload?blocking=true`, {
+    method: "POST",
+    body: formData,
+  }).then((res) => res.json());
 }

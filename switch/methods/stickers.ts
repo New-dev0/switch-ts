@@ -1,97 +1,93 @@
 import Client from "../client/client";
 import { Endpoints } from "../client/endpoints";
+import { Sticker } from "../models/sticker";
 
-interface Sticker {
-  id: string;
-  setId: string;
-  emoji?: string;
-  fileId?: string;
-  width?: number;
-  height?: number;
-  isAnimated?: boolean;
-  isVideo?: boolean;
-  type?: string;
-  thumbnail?: {
-    fileId: string;
-    width: number;
-    height: number;
-  };
-  thumbUrl?: string;
-  setName?: string;
-  maskPosition?: {
-    point: string;
-    xShift: number;
-    yShift: number;
-    scale: number;
-  };
-  customEmojiId?: string;
-  needsRepainting?: boolean;
-  premiumAnimation?: {
-    fileId: string;
-    width: number;
-    height: number;
-  };
+export interface GetStickerPackParams {
+  packId: string;
 }
 
-export interface GetStickerSetParams {
-  setId: string;
-}
-
-export interface CreateStickerSetParams {
-  userId: number;
+export interface CreateStickerPackParams {
   name: string;
   title: string;
   stickers: Sticker[];
-  stickerFormat?: string;
-  stickerType?: string;
-  needsRepainting?: boolean;
 }
 
-export interface AddStickerToSetParams {
-  userId: number;
-  name: string;
-  sticker: Sticker;
+export interface SortStickersParams {
+  packId: string;
+  stickers: string[];  // Array of sticker IDs in desired order
 }
 
-export interface SetStickerPositionInSetParams {
-  sticker: string;
-  position: number;
+export interface InstallStickerParams {
+  packId: string;
 }
 
-export interface DeleteStickerFromSetParams {
-  sticker: string;
-}
-
-export async function getStickerSet(client: Client, params: GetStickerSetParams): Promise<Sticker[]> {
-  return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/set?setId=${params.setId}`, {
-    method: "GET",
+export async function getStickersFromPack(client: Client, params: GetStickerPackParams): Promise<Sticker[]> {
+  return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker?packId=${params.packId}`, {
+    method: "GET"
   });
 }
 
-export async function createStickerSet(client: Client, params: CreateStickerSetParams): Promise<boolean> {
-  return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/set`, {
-    method: "POST",
-    body: JSON.stringify(params),
-  });
-}
-
-export async function addStickerToSet(client: Client, params: AddStickerToSetParams): Promise<boolean> {
+export async function createSticker(client: Client, sticker: Sticker): Promise<Sticker> {
   return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker`, {
     method: "POST",
-    body: JSON.stringify(params),
+    body: JSON.stringify(sticker)
   });
 }
 
-export async function setStickerPositionInSet(client: Client, params: SetStickerPositionInSetParams): Promise<boolean> {
-  return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/position`, {
+export async function removeSticker(client: Client, stickerId: string): Promise<void> {
+  await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker?stickerId=${stickerId}`, {
+    method: "DELETE"
+  });
+}
+
+export async function getStickerPacks(client: Client): Promise<any[]> {
+  return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/pack`, {
+    method: "GET"
+  });
+}
+
+export async function createStickerPack(client: Client, params: CreateStickerPackParams): Promise<any> {
+  return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/pack`, {
     method: "POST",
-    body: JSON.stringify(params),
+    body: JSON.stringify(params)
   });
 }
 
-export async function deleteStickerFromSet(client: Client, params: DeleteStickerFromSetParams): Promise<boolean> {
-  return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker`, {
-    method: "DELETE",
-    body: JSON.stringify(params),
+export async function deleteStickerPack(client: Client, packId: string): Promise<void> {
+  await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/pack?packId=${packId}`, {
+    method: "DELETE"
+  });
+}
+
+export async function installStickerPack(client: Client, params: InstallStickerParams): Promise<void> {
+  await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/pack/install`, {
+    method: "POST",
+    body: JSON.stringify(params)
+  });
+}
+
+export async function getInstalledStickerPacks(client: Client): Promise<any[]> {
+  return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/pack/installed`, {
+    method: "GET"
+  });
+}
+
+export async function searchStickerPacks(client: Client, query: string): Promise<any[]> {
+  return await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/pack/search?query=${query}`, {
+    method: "GET"
+  });
+}
+
+export async function sortStickersInPack(client: Client, params: SortStickersParams): Promise<void> {
+  await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/pack/sort`, {
+    method: "POST",
+    body: JSON.stringify(params)
+  });
+}
+
+export async function uninstallStickerPack(client: Client, params: InstallStickerParams): Promise<void> {
+  await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/sticker/pack/uninstall`, {
+    method: "POST",
+    body: JSON.stringify(params)
   });
 }

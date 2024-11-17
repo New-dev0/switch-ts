@@ -27,7 +27,7 @@ export async function getAllGroups(client: Client, communityId: string): Promise
     const response = await client.request(
         `${Endpoints.COMMUNITY_SERVICE_URL}/v1/community/group/all?communityId=${communityId}`
     );
-    return response?.result.map((groupData) => Group.parseFromData(groupData)) || [];
+    return response?.result.map((groupData: Record<string, any>) => Group.parseFromData(groupData)) || [];
 }
 
 export async function updateGroup(client: Client, group: Group): Promise<Group> {
@@ -44,11 +44,19 @@ export async function updateGroup(client: Client, group: Group): Promise<Group> 
     return Group.parseFromData(response);
 }
 
-export async function deleteGroup(client: Client, groupId: string): Promise<void> {
-    await client.request(
-        `${Endpoints.COMMUNITY_SERVICE_URL}/v1/community/group/${groupId}`,
-        {
-            method: "DELETE",
-        }
-    );
+export interface GetGroupParams {
+  groupId: string;
+}
+
+export interface DeleteGroupParams {
+  groupId: string;
+}
+
+export async function deleteGroup(client: Client, params: DeleteGroupParams): Promise<void> {
+  await client.request(
+    `${Endpoints.COMMUNITY_SERVICE_URL}/v1/community/group/${params.groupId}`,
+    {
+      method: "DELETE"
+    }
+  );
 }

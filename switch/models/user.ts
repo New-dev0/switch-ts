@@ -1,4 +1,3 @@
-
 export enum UserStatusInfo {
     OFFLINE, ONLINE
 };
@@ -40,7 +39,7 @@ export function parseSender(data: any): User {
         "is_game": "isGame",
     };
 
-    let transformedData = {};
+    const transformedData: Record<string, any> = {};
     Object.entries(keyValueMap).forEach(([oldKey, newKey]) => {
         if (data[oldKey] !== undefined) {
             transformedData[newKey] = data[oldKey];

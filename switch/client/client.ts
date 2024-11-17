@@ -11,6 +11,12 @@ import * as GameMethods from "../methods/game";
 import * as StickerMethods from "../methods/stickers";
 import * as MediaMethods from "../methods/media";
 import * as CallbackMethods from "../methods/callbacks";
+import * as OrganizationMethods from "../methods/organization";
+import * as SearchMethods from "../methods/search";
+import * as InstantMessagingMethods from "../methods/instant_messaging";
+import * as RestrictMethods from "../methods/restrict";
+import * as ModerationMethods from "../methods/moderation";
+import * as GuidelineMethods from "../methods/guidelines";
 
 import Message from "../models/message";
 import { BotCommand, BotInfo } from "../models/bot";
@@ -19,6 +25,8 @@ import Group from "../models/group";
 import { Community } from "../models/community";
 import { Command } from "../models/command";
 import { Media } from "../models/media";
+import { GameInfo } from "../models/game";
+import { Sticker } from "../models/sticker";
 
 export default class Client extends switchBaseClient {
     private receiveUpdates: boolean;
@@ -97,7 +105,7 @@ export default class Client extends switchBaseClient {
     }
 
     public async deleteChannel(channelId: string) {
-        return await ChannelMethods.deleteChannel(this, channelId);
+        return await ChannelMethods.deleteChannel(this, {channelId});
     }
 
     public async getAllChannel(communityId: string) {
@@ -113,7 +121,7 @@ export default class Client extends switchBaseClient {
     }
 
     public async deleteGroup(groupId: string) {
-        return await GroupMethods.deleteGroup(this, groupId);
+        return await GroupMethods.deleteGroup(this, {groupId});
     }
 
     public async createGroup(group: Group) {
@@ -125,45 +133,69 @@ export default class Client extends switchBaseClient {
     }
 
     // Game methods
-    public async createLeaderboard(params: GameMethods.CreateLeaderboardParams) {
+    public async createLeaderboard(params: GameMethods.CreateLeaderboardParams): Promise<GameInfo> {
         return await GameMethods.createLeaderboard(this, params);
     }
 
-    public async updateLeaderboard(params: GameMethods.UpdateLeaderboardParams) {
+    public async updateLeaderboard(params: GameMethods.UpdateLeaderboardParams): Promise<GameInfo> {
         return await GameMethods.updateLeaderboard(this, params);
     }
 
-    public async getGlobalLeaderboard(botId?: number) {
+    public async getGlobalLeaderboard(botId?: number): Promise<GameInfo[]> {
         return await GameMethods.getGlobalLeaderboard(this, botId);
     }
 
-    public async getCommunityLeaderboard(communityId: string, botId?: number) {
+    public async getCommunityLeaderboard(communityId: string, botId?: number): Promise<GameInfo[]> {
         return await GameMethods.getCommunityLeaderboard(this, communityId, botId);
     }
 
-    public async getGameScore(params: GameMethods.GetGameScoreParams) {
+    public async getGameScore(params: GameMethods.GetGameScoreParams): Promise<GameInfo> {
         return await GameMethods.getGameScore(this, params);
     }
 
     // Sticker methods
-    public async getStickerSet(params: StickerMethods.GetStickerSetParams) {
-        return await StickerMethods.getStickerSet(this, params);
+    public async getStickersFromPack(params: StickerMethods.GetStickerPackParams): Promise<Sticker[]> {
+        return await StickerMethods.getStickersFromPack(this, params);
     }
 
-    public async createStickerSet(params: StickerMethods.CreateStickerSetParams) {
-        return await StickerMethods.createStickerSet(this, params);
+    public async createSticker(sticker: Sticker): Promise<Sticker> {
+        return await StickerMethods.createSticker(this, sticker);
     }
 
-    public async addStickerToSet(params: StickerMethods.AddStickerToSetParams) {
-        return await StickerMethods.addStickerToSet(this, params);
+    public async removeSticker(stickerId: string): Promise<void> {
+        return await StickerMethods.removeSticker(this, stickerId);
     }
 
-    public async setStickerPositionInSet(params: StickerMethods.SetStickerPositionInSetParams) {
-        return await StickerMethods.setStickerPositionInSet(this, params);
+    public async getStickerPacks(): Promise<any[]> {
+        return await StickerMethods.getStickerPacks(this);
     }
 
-    public async deleteStickerFromSet(params: StickerMethods.DeleteStickerFromSetParams) {
-        return await StickerMethods.deleteStickerFromSet(this, params);
+    public async createStickerPack(params: StickerMethods.CreateStickerPackParams): Promise<any> {
+        return await StickerMethods.createStickerPack(this, params);
+    }
+
+    public async deleteStickerPack(packId: string): Promise<void> {
+        return await StickerMethods.deleteStickerPack(this, packId);
+    }
+
+    public async installStickerPack(params: StickerMethods.InstallStickerParams): Promise<void> {
+        return await StickerMethods.installStickerPack(this, params);
+    }
+
+    public async getInstalledStickerPacks(): Promise<any[]> {
+        return await StickerMethods.getInstalledStickerPacks(this);
+    }
+
+    public async searchStickerPacks(query: string): Promise<any[]> {
+        return await StickerMethods.searchStickerPacks(this, query);
+    }
+
+    public async sortStickersInPack(params: StickerMethods.SortStickersParams): Promise<void> {
+        return await StickerMethods.sortStickersInPack(this, params);
+    }
+
+    public async uninstallStickerPack(params: StickerMethods.InstallStickerParams): Promise<void> {
+        return await StickerMethods.uninstallStickerPack(this, params);
     }
 
     // Media methods
@@ -186,6 +218,172 @@ export default class Client extends switchBaseClient {
     // Add this new method
     public async answerCallbackQuery(params: CallbackMethods.AnswerCallbackParams): Promise<boolean> {
         return await CallbackMethods.answerCallbackQuery(this, params);
+    }
+
+    // Organization methods
+    public async getOrganizations(params: OrganizationMethods.GetOrganizationsParams) {
+        return await OrganizationMethods.getOrganizations(this, params);
+    }
+
+    public async getOrganizationById(id: string) {
+        return await OrganizationMethods.getOrganizationById(this, id);
+    }
+
+    public async getOrganizationApps(id: string) {
+        return await OrganizationMethods.getOrganizationApps(this, id);
+    }
+
+    public async getOrganizationFollowers(id: string) {
+        return await OrganizationMethods.getOrganizationFollowers(this, id);
+    }
+
+    public async pinMessage(params: messageMethods.PinMessageParams) {
+        return await messageMethods.pinMessage(this, params);
+    }
+
+    public async getMessageReactions(params: messageMethods.GetReactionsParams) {
+        return await messageMethods.getMessageReactions(this, params);
+    }
+
+    public async addReaction(reaction: messageMethods.EmojiReaction) {
+        return await messageMethods.addReaction(this, reaction);
+    }
+
+    public async removeReaction(reaction: messageMethods.EmojiReaction) {
+        return await messageMethods.removeReaction(this, reaction);
+    }
+
+    public async getOrganizationMembers(orgId: string) {
+        return await OrganizationMethods.getOrganizationMembers(this, orgId);
+    }
+
+    public async searchInCommunity(params: SearchMethods.SearchParams) {
+        return await SearchMethods.searchInCommunity(this, params);
+    }
+
+
+    public async deleteCommunity(params: CommunityMethods.DeleteCommunityParams) {
+        return await CommunityMethods.deleteCommunity(this, params);
+    }
+
+    public async getBotsInstantMessagingConfig(params: InstantMessagingMethods.GetInstantMessagingParams) {
+        return await InstantMessagingMethods.getBotsInstantMessagingConfig(this, params);
+    }
+
+    public async enableInstantBotMessaging(params: InstantMessagingMethods.EnableInstantMessagingParams) {
+        return await InstantMessagingMethods.enableInstantBotMessaging(this, params);
+    }
+
+    public async disableInstantBotMessaging(params: InstantMessagingMethods.EnableInstantMessagingParams) {
+        return await InstantMessagingMethods.disableInstantBotMessaging(this, params);
+    }
+
+    public async getCommunityMembers(params: CommunityMethods.GetCommunityMembersParams) {
+        return await CommunityMethods.getCommunityMembers(this, params);
+    }
+
+    public async restrictUser(request: RestrictMethods.RestrictUserRequest) {
+        return await RestrictMethods.restrictUser(this, request);
+    }
+
+    public async updateRestrictedUser(request: RestrictMethods.RestrictUserRequest) {
+        return await RestrictMethods.updateRestrictedUser(this, request);
+    }
+
+    public async getRestrictedUser(communityId: string, userId: number) {
+        return await RestrictMethods.getRestrictedUser(this, communityId, userId);
+    }
+
+    public async getRestrictedUsers(communityId: string) {
+        return await RestrictMethods.getRestrictedUsers(this, communityId);
+    }
+
+    public async banUser(request: ModerationMethods.BanUserRequest) {
+        return await ModerationMethods.banUser(this, request);
+    }
+
+    public async unbanUser(request: ModerationMethods.UnbanRequestAction) {
+        return await ModerationMethods.unbanUser(this, request);
+    }
+
+    public async getBannedUsers(communityId: string) {
+        return await ModerationMethods.getBannedUsers(this, communityId);
+    }
+
+    public async createRole(communityId: string, role: ModerationMethods.Role) {
+        return await ModerationMethods.createRole(this, communityId, role);
+    }
+
+    public async getRoles(communityId: string) {
+        return await ModerationMethods.getRoles(this, communityId);
+    }
+
+    public async deleteRole(roleId: number) {
+        return await ModerationMethods.deleteRole(this, roleId);
+    }
+
+    public async addMemberToRole(roleMember: ModerationMethods.RoleMember) {
+        return await ModerationMethods.addMemberToRole(this, roleMember);
+    }
+
+    public async getRoleMembers(roleId: number) {
+        return await ModerationMethods.getRoleMembers(this, roleId);
+    }
+
+    public async removeMemberFromRole(roleId: number, memberId: number) {
+        return await ModerationMethods.removeMemberFromRole(this, roleId, memberId);
+    }
+
+    public async createGuideline(guideline: GuidelineMethods.CommunityGuideline) {
+        return await GuidelineMethods.createGuideline(this, guideline);
+    }
+
+    public async updateGuideline(guideline: GuidelineMethods.CommunityGuideline) {
+        return await GuidelineMethods.updateGuideline(this, guideline);
+    }
+
+    public async getGuideline(guidelineId: number) {
+        return await GuidelineMethods.getGuideline(this, guidelineId);
+    }
+
+    public async getGuidelinesForCommunity(communityId: string) {
+        return await GuidelineMethods.getGuidelinesForCommunity(this, communityId);
+    }
+
+    public async deleteGuideline(guidelineId: number) {
+        return await GuidelineMethods.deleteGuideline(this, guidelineId);
+    }
+
+    public async createPredefinedGuideline(guideline: GuidelineMethods.CommunityDefaultGuideline) {
+        return await GuidelineMethods.createPredefinedGuideline(this, guideline);
+    }
+
+    public async updatePredefinedGuideline(guideline: GuidelineMethods.CommunityDefaultGuideline) {
+        return await GuidelineMethods.updatePredefinedGuideline(this, guideline);
+    }
+
+    public async getPredefinedGuideline(guidelineId: number) {
+        return await GuidelineMethods.getPredefinedGuideline(this, guidelineId);
+    }
+
+    public async getAllPredefinedGuidelines() {
+        return await GuidelineMethods.getAllPredefinedGuidelines(this);
+    }
+
+    public async sendMedia(params: messageMethods.SendMediaParams) {
+        return await messageMethods.sendMedia(this, params);
+    }
+
+    public async deleteMessage(messageId: number) {
+        return await this.request(
+            `${Endpoints.CHAT_SERVICE_URL}/v1/message/${messageId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
     }
 
     parseChatEvents(data: any) {
@@ -218,5 +416,24 @@ export default class Client extends switchBaseClient {
                 });
             }
         }
+    }
+
+    public async isUserAdmin(communityId: string, userId?: string) {
+        return await CommunityMethods.isUserAdmin(this, communityId, userId);
+    }
+
+    public async getAvailableCommands(params: {
+        botId: number;
+        communityId: string;
+    }) {
+        return await CommunityMethods.getAvailableCommands(this, params);
+    }
+
+    public async getBotCommunityMembers(communityId: string) {
+        return await CommunityMethods.getBotCommunityMembers(this, communityId);
+    }
+
+    public async setBotIntroMessage(params: BotMethods.SetBotIntroMessageParams) {
+        return await BotMethods.setBotIntroMessage(this, params);
     }
 }

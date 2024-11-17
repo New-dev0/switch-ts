@@ -2,6 +2,9 @@ import Client from "../client/client";
 import { editMessageParams, sendMessageParams } from "../methods/message";
 import { parseSender } from "./user";
 import User from "./user";
+import InlineMarkup from "./inline_markup";
+import { Button } from "./inline_markup";
+import { Endpoints } from "../client/endpoints";
 
 export type MessageParams = {
     message: string;
@@ -13,7 +16,7 @@ export type MessageParams = {
 };
 
 export default class Message {
-    private _client?: Client | null;
+    protected _client?: Client | null;
 
     message: string;
     id: number | null = null;
@@ -21,7 +24,7 @@ export default class Message {
     channelId?: string | null;
     groupId?: string | null;
     userId?: number | null;
-    status: number;
+    status: number = 0;
     sender?: User | null;
     receiver?: User | null;
     receiverId?: number;
@@ -39,6 +42,24 @@ export default class Message {
         this.channelId = params.channelId;
         this.userId = params.userId;
         this.groupId = params.groupId;
+        this.status = params.status || 0;
+    }
+
+    async replyMedia(params: {
+        file: File;
+        caption?: string;
+        inlineMarkup?: InlineMarkup | Button;
+    }) {
+        return await this._client?.sendMedia({
+            file: params.file,
+            caption: params.caption,
+            repliedTo: this.id,
+            channelId: this.channelId,
+            groupId: this.groupId,
+            communityId: this.communityId,
+            receiverId: this.receiverId,
+            inlineMarkup: params.inlineMarkup
+        });
     }
 
     async replyText(params: sendMessageParams) {
@@ -83,5 +104,85 @@ export default class Message {
         response.channelChat = message["channelChat"];
 
         return response;
+    }
+
+    async pin() {
+        if (!this.id) return;
+        if (!this.channelId || !this.groupId || !this.communityId) return;
+        return await this._client?.pinMessage({
+            messageId: this.id,
+            communityId: this.communityId!,
+            channelId: this.channelId,
+            groupId: this.groupId,
+            messageType: this.channelChat ? "POST_MESSAGE" : "MESSAGE",
+            userId: this.userId!
+        });
+    }
+
+    async unpin() {
+        if (!this.id) return;
+        if (!this.channelId || !this.groupId || !this.communityId) return;
+        return await this._client?.pinMessage({
+            messageId: this.id,
+            communityId: this.communityId!,
+            channelId: this.channelId,
+            groupId: this.groupId,
+            messageType: this.channelChat ? "POST_MESSAGE" : "MESSAGE",
+            userId: this.userId!,
+        });
+    }
+
+    async addReaction(emoji: string) {
+        if (!this.id || !this.userId) return;
+        
+        return await this._client?.addReaction({
+            emojiUnicode: emoji,
+            messageId: this.id,
+            userId: this.userId
+        });
+    }
+
+    async removeReaction(emoji: string) {
+        if (!this.id || !this.userId) return;
+        
+        return await this._client?.removeReaction({
+            emojiUnicode: emoji,
+            messageId: this.id,
+            userId: this.userId
+        });
+    }
+
+    async getReactions() {
+        if (!this.id) return;
+        
+        return await this._client?.getMessageReactions({
+            messageId: this.id
+        });
+    }
+
+    async delete() {
+        if (!this.id) return;
+        
+        return await this._client?.request(
+            `${Endpoints.CHAT_SERVICE_URL}/v1/message/${this.id}`,
+            {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+    }
+
+    async forward(params: {
+        groupChannelId?: string;
+        receiverId?: number;
+    }) {
+        if (!this.id) return;
+        
+        return await this._client?.forwardMessage({
+            messageId: this.id,
+            ...params
+        });
     }
 }

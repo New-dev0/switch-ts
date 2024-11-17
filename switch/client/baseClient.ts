@@ -21,13 +21,13 @@ interface Handler {
 
 export abstract class switchBaseClient {
     private _token: string;
-    private _community_ws: WsClient;
-    private _chat_ws: WsClient;
+    private _community_ws: WsClient | null = null;
+    private _chat_ws: WsClient | null = null;
 
     public _handlers: Array<Handler> = [];
-    private _community_handlers: Array<Handler>;
+    private _community_handlers: Array<Handler> = [];
 
-    public _user: User;
+    public _user!: User;
 
     constructor(
         token: string,
@@ -69,7 +69,7 @@ export abstract class switchBaseClient {
         this._community_ws.connect();
     }
 
-    abstract parseChatEvents(data: any);
+    abstract parseChatEvents(data: any): void;
 
     public abstract getMe(): Promise<User>;
 

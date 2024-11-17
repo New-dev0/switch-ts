@@ -10,7 +10,7 @@ export class WsClient {
     private reconnectAttempts: number = 0;
     private maxReconnectAttempts: number = 5;
     private reconnectInterval: number = 5000; // 5 seconds
-    private onMessageCallback: ((x) => any) | null;
+    private onMessageCallback: ((data: any) => any) | null;
 
     // Bearer token for authentication
     private token: string;
@@ -19,7 +19,7 @@ export class WsClient {
         url: string,
         token: string,
         topic: string,
-        onMessageCallback: ((x) => any) | null = null,
+        onMessageCallback: ((data: any) => any) | null = null,
     ) {
         this.url = url;
         this.token = token;

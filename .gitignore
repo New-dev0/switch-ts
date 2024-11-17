@@ -1,0 +1,12 @@
+*js
+*py
+*pkl
+node_modules/
+chat_openapi.json
+openapi.json
+run.ts
+yarn.lock
+package-lock.json
+.cursorignore
+index.ts
+dist/
