@@ -79,7 +79,6 @@ export abstract class switchBaseClient {
             params: { command },
             type: HandlerType.COMMAND,
         });
-        console.log(this._handlers);
     }
 
     public onMessage(handler: (message: Message) => any) {

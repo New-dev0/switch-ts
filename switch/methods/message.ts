@@ -46,6 +46,7 @@ export async function sendMessage(client: Client, params: sendMessageParams) {
         }
         requestData.inlineMarkup = markup.convertToRequest();
     }
+    requestData.inline_markup = requestData.inlineMarkup;
 
     const message = await client.request(requestUrl, {
         method: "POST",
@@ -60,7 +61,10 @@ export async function editMessage(
     params: editMessageParams,
 ) {
     const requestData: any = { ...params };
-    
+    if (!requestData.id) {
+        requestData.id = messageId;
+    };
+
     // Handle inline markup
     if (requestData.inlineMarkup) {
         let markup: InlineMarkup;
@@ -155,10 +159,9 @@ export async function forwardMessage(client: Client, params: ForwardMessageParam
 }
 
 export async function getMessage(client: Client, messageId: number): Promise<Message> {
-    const response = await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/message/${messageId}`, {
+    const response = await client.request(`${Endpoints.CHAT_SERVICE_URL}/v1/message/findOne/${messageId}`, {
         method: "GET",
     });
-
     return Message.parseMessageFromJson(response, client);
 }
 

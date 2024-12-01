@@ -409,7 +409,6 @@ export default class Client extends switchBaseClient {
                         ) {
                             const message: Command = Command
                                 .parseFromData(data, this);
-                            console.log(message.commandParams);
                             await handler.fn(message);
                         }
                     }

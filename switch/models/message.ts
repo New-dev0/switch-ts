@@ -80,9 +80,9 @@ export default class Message {
     }
 
     static parseMessageFromJson(data: any, client: Client) {
-        let message = data?.details
+        let message = data?.id ? data : (data?.details
             ? data["details"]["message"]
-            : data["message"];
+            : data["message"]);
         const response = new Message({
             message: message["message"],
             status: message["status"],
@@ -92,9 +92,9 @@ export default class Message {
         response.userId = message["userId"];
         response.receiverId = message["receiverId"];
         response.personalChat = message["personalChat"];
-        response.sender = parseSender(
-            data?.details ? data["details"]["sender"] : message["senderInfo"],
-        );
+        if (data?.details?.sender || message.senderInfo) {
+            response.sender = parseSender(data?.details?.sender || message.senderInfo);
+        }
         if (data?.details?.receiver) {
             response.receiver = parseSender(data["details"]["receiver"]);
         }

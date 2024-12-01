@@ -1,6 +1,6 @@
 {
   "name": "switch-bots",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Switch API TypeScript SDK for building bots and applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -68,12 +68,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/switchpe/switch-bots.git"
+    "url": "git+https://github.com/New-dev0/switch-bots.git"
   },
   "bugs": {
-    "url": "https://github.com/switchpe/switch-bots/issues"
+    "url": "https://github.com/New-dev0/switch-bots/issues"
   },
-  "homepage": "https://github.com/switchpe/switch-bots#readme",
+  "homepage": "https://github.com/New-dev0/switch-bots#readme",
   "publishConfig": {
     "access": "public"
   }

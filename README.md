@@ -167,16 +167,6 @@ await client.restrictUser({
 
 ## 🛠️ Advanced Usage
 
-### Custom Inline Buttons
-```typescript
-const markup = new InlineMarkup()
-    .addRow()
-        .addButton("Click Me", "button1", "callback")
-        .addButton("Visit", "https://switch.pe", "url")
-    .addRow()
-        .addButton("Share", "share_button", "callback");
-```
-
 ### Game Integration
 ```typescript
 // Update leaderboard
